@@ -1,4 +1,5 @@
 @import './chat-activity.css';
+@import './apple-surfaces.css';
 
 /* In @layer base so utilities can override it. */
 @layer base {
@@ -758,7 +759,100 @@ button { color: inherit; }
 .sp-selector > [role='listbox'] { max-height: min(340px, calc(100vh - 220px)); overflow-y: auto; }
 .sp-context-kicker, .sp-composer-hint { color: var(--appearance-text-muted); }
 
+/* Apple chrome: quiet grouped controls, a floating material menu, and a
+   raised composer. Opaque controls avoid stacking translucent surfaces. */
+:root[data-visual-style='apple'] {
+  .sp-shell { grid-template-columns: minmax(0, 1fr); }
+  .sp-shell > * { min-width: 0; }
+  .sp-header {
+    min-height: 76px;
+    padding: 16px 20px 12px;
+    border-bottom: none;
+    background: var(--appearance-canvas);
+  }
+  .sp-header p { margin-top: 4px; font-size: 11px; }
+  .sp-session-label { font-size: 10px; letter-spacing: 0.02em; text-transform: none; }
+  .sp-toolbar { margin: 0 12px; border: none; background: transparent; }
+  .sp-meta { gap: 4px; padding: 4px; border-radius: var(--appearance-radius-md); background: var(--apple-control); }
+  .sp-chip { padding-inline: 8px; border-color: transparent; background: transparent; font-weight: 500; }
+  .sp-chip:hover, .sp-chip[aria-expanded='true'] {
+    border-color: var(--apple-hairline);
+    background: var(--appearance-surface);
+    box-shadow: var(--appearance-shadow-1);
+  }
+  .sp-selector {
+    padding: 6px;
+    border-color: var(--apple-hairline);
+    background: var(--apple-material);
+    backdrop-filter: var(--apple-material-filter);
+    box-shadow: var(--apple-highlight), var(--appearance-shadow-3);
+    transform-origin: top left;
+  }
+  .sp-chip-wrap:last-child .sp-selector { transform-origin: top right; }
+  .sp-selector-item { font-size: 13px; }
+  .sp-selector-current { background: var(--appearance-selected-surface); color: var(--appearance-text); }
+  .sp-selector-current::after { color: var(--appearance-focus); }
+  .sp-selector-filter { background: var(--apple-control); border-color: transparent; }
+  .sp-context { min-height: 60px; padding: 10px 8px; }
+  .sp-context-kicker { font-size: 10px; letter-spacing: 0.01em; text-transform: none; }
+  .sp-context-text { margin-top: 2px; color: var(--appearance-text); font-size: 12px; }
+  .sp-context-switch { background: var(--appearance-surface-raised); }
+  .sp-context-switch::after { background: #fff; box-shadow: 0 1px 3px rgb(0 0 0 / 20%); }
+  .sp-context-toggle:checked + .sp-context-switch { background: var(--appearance-success); border-color: var(--appearance-success); }
+  .sp-context-toggle:checked + .sp-context-switch::after { background: #fff; }
+  .sp-body { padding: 20px; gap: 18px; }
+  .sp-empty { width: min(320px, 100%); padding: 24px 4px; }
+  .sp-empty-mark {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 20px;
+    border-color: var(--apple-hairline);
+    font-size: 28px;
+    box-shadow: var(--apple-highlight), var(--appearance-shadow-2);
+  }
+  .sp-empty h2 { font-size: 1.5rem; line-height: 1.2; letter-spacing: -0.035em; }
+  .sp-empty p { max-width: 28ch; margin-inline: auto; font-size: 13px; line-height: 1.6; }
+  .sp-starters { margin-top: 28px; gap: 8px; }
+  .sp-starters button {
+    min-height: 48px;
+    padding: 12px 14px;
+    border-color: var(--apple-hairline);
+    font-size: 13px;
+    box-shadow: var(--appearance-shadow-1);
+  }
+  .sp-starters button span { color: var(--appearance-text-subtle); }
+  .sp-starters button:hover { border-color: var(--appearance-border-strong); background: var(--apple-control); }
+  .sp-msg { font-size: 0.875rem; line-height: 1.65; }
+  .sp-msg-user { padding: 10px 16px; box-shadow: var(--apple-highlight); }
+  .sp-msg-assistant a { color: var(--appearance-focus); }
+  .sp-input-area { padding: 12px 16px 14px; border-top: none; background: var(--appearance-canvas); }
+  .sp-composer {
+    padding: 6px;
+    gap: 4px;
+    border-color: var(--apple-hairline);
+    background: var(--appearance-surface);
+    box-shadow: var(--apple-highlight), var(--appearance-shadow-2);
+  }
+  .sp-input { padding-inline: 10px; font-size: 0.875rem; }
+  .sp-send { min-width: 44px; width: 44px; padding: 0; box-shadow: var(--apple-highlight); }
+  .sp-send span:first-child { display: none; }
+  .sp-send-icon { font-size: 22px; font-weight: 500; }
+  .sp-composer-hint { margin-top: 10px; font-size: 10px; line-height: 1.7; text-align: center; }
+  .sp-latest {
+    background: var(--apple-material);
+    backdrop-filter: var(--apple-material-filter);
+  }
+  /* Preserve the centering translation when the floating button is pressed. */
+  .sp-latest:active { transform: translateX(-50%); }
+}
+
 @media (max-width: 340px) {
+  :root[data-visual-style='apple'] {
+    .sp-meta { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .sp-header { padding-inline: 12px; }
+    .sp-body { padding: 12px; }
+    .sp-context { padding-inline: 4px; }
+  }
   .sp-header { min-height: 56px; }
   .sp-header p { display: none; }
   .sp-meta {
@@ -780,6 +874,7 @@ button { color: inherit; }
 }
 
 @media (max-width: 260px) {
+  :root[data-visual-style='apple'] .sp-meta { grid-template-columns: minmax(0, 1fr); }
   .sp-meta {
     grid-template-columns: 1fr;
     max-height: 116px;

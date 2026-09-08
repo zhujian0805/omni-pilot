@@ -1,3 +1,5 @@
+@import './apple-surfaces.css';
+
 /* In @layer base so utilities can override it. Unlayered CSS beats layered
    CSS regardless of specificity. Layer order is declared in tailwind.css. */
 @layer base {
@@ -234,6 +236,67 @@ button {
   color: var(--ink);
 }
 
+/* Inset, grouped preferences echo a compact macOS settings panel. */
+:root[data-visual-style='apple'] {
+  .popup-shell { gap: 20px; padding: 20px; }
+  .topbar { min-height: 40px; }
+  .header-left { min-height: 44px; }
+  .header-left:hover { transform: none; }
+  .status { font-size: 11px; line-height: 1.4; }
+  .launcher { gap: 12px; }
+
+  .primary-action {
+    min-height: 48px;
+    font-size: 13px;
+    box-shadow: var(--apple-highlight), 0 3px 8px rgb(0 0 0 / 10%);
+  }
+
+  .primary-action:hover { transform: none; }
+  .primary-action:active { transform: var(--appearance-active-transform); }
+  #desc { padding-inline: 2px; font-size: 12px; line-height: 1.6; }
+  .preferences { border-top: none; gap: 8px; }
+  .section-heading { min-height: auto; padding: 0 12px; }
+  #appearanceLabel { font-size: 11px; font-weight: 500; letter-spacing: 0.025em; }
+
+  .preference-list {
+    padding: 0 12px;
+    border: 1px solid var(--apple-hairline);
+    border-radius: var(--appearance-radius-md);
+    background: var(--appearance-surface);
+    box-shadow: var(--appearance-shadow-1);
+  }
+
+  .preference-row {
+    grid-template-columns: minmax(0, 1fr) minmax(112px, 52%);
+    gap: 8px;
+    padding: 4px 0;
+  }
+
+  .preference-row + .preference-row { border-top: 1px solid var(--apple-hairline); }
+  .preference-row label { color: var(--appearance-text); font-size: 12px; }
+  .preference-row select {
+    border-color: transparent;
+    background: var(--appearance-surface);
+    color: var(--appearance-text-muted);
+    padding-left: 8px;
+    cursor: pointer;
+  }
+  .preference-row select:hover { background: var(--apple-control); }
+
+  .settings-btn {
+    justify-content: flex-start;
+    padding-inline: 12px;
+    border-color: var(--apple-hairline);
+    background: var(--appearance-surface);
+    color: var(--appearance-text);
+    font-size: 12px;
+    box-shadow: var(--appearance-shadow-1);
+  }
+  .settings-icon { color: var(--appearance-text-muted); }
+  .settings-btn::after { content: '›'; margin-left: auto; font-size: 20px; color: var(--appearance-text-subtle); }
+  .settings-btn:hover { background: var(--apple-control); }
+}
+
 @media (max-width: 299px) {
   .popup-shell {
     gap: 14px;
@@ -254,5 +317,10 @@ button {
   .preference-row {
     grid-template-columns: minmax(0, 1fr);
     gap: 2px;
+  }
+
+  :root[data-visual-style='apple'] {
+    .popup-shell { padding: 14px; }
+    .preference-row { grid-template-columns: minmax(0, 1fr); }
   }
 }
